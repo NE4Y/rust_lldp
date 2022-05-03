@@ -5,7 +5,7 @@ use std::path::Display;
 use byteorder::{BigEndian, ByteOrder};
 
 #[derive(Debug)]
-enum EtherType {
+pub enum EtherType {
     LLDP,
     Unknown(u16),
 }
@@ -44,6 +44,14 @@ impl<'a> Ethernet<'a> {
             payload: &bytes[14..],
         }
     }
+
+    pub fn get_ether_type(&self) -> &EtherType {
+        &self.ether_type
+    }
+
+    pub fn get_payload(&self)-> &[u8] {
+        &self.payload
+    }
 }
 
 impl<'a> fmt::Display for Ethernet<'a> {
@@ -56,7 +64,7 @@ impl<'a> fmt::Display for Ethernet<'a> {
 }
 
 #[derive(Debug)]
-struct MacAddress<'a>(&'a [u8]);
+pub struct MacAddress<'a>(pub &'a [u8]);
 
 impl<'a> fmt::Display for MacAddress<'a> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {

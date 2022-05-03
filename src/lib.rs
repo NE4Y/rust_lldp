@@ -1,11 +1,11 @@
 extern crate pcap;
-
 mod layer2;
-pub struct NetworkManager {}
+mod misc;
+pub struct NetParser {}
 
-impl NetworkManager {
+impl NetParser {
     pub fn new() -> Self {
-        NetworkManager {}
+        NetParser {}
     }
 
     pub fn start(&self) {
