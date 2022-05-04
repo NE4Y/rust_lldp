@@ -1,8 +1,6 @@
 use std::fmt;
 use std::fmt::Formatter;
 use byteorder::{BigEndian, ByteOrder};
-use crate::layer2::ethernet::MacAddress;
-use nom::{bits, bits::complete::take, IResult};
 use crate::tlv;
 use crate::tlv::Packet;
 
@@ -15,7 +13,7 @@ pub struct LLDPU<'a> {
 
 impl<'a> LLDPU<'a> {
     pub fn new(bytes: &'a [u8]) -> LLDPU {
-        let mut tlvs:  Vec<Box<dyn TLV>> = vec![];
+        let mut tlvs:  Vec<Box<dyn TLV + 'a>> = vec![];
 
         let mut pos = 0;
 
@@ -35,15 +33,16 @@ impl<'a> LLDPU<'a> {
             let value = &bytes[pos+2..(pos + 2 + l as usize) as usize];
             pos += 2 + l as usize;
 
-            let tlv: Box<dyn TLV> = match t {
-                1 => Box::new(ChassisIdTLV::new(l as TlvLength, value)),
+            let tlv: Box<dyn TLV + 'a> = match t {
+                1 => Box::new(tlv::chassis_id::new(l as TlvLength, value)),
                 2 => Box::new(tlv::port_id::new(l as TlvLength, value)),
                 3 => Box::new(tlv::ttl::new(l as TlvLength, value)),
-                4 => Box::new(PortDescriptionTLV::new(l as TlvLength, value)),
-                5 => Box::new(SystemName::new(l as TlvLength, value)),
-                6 => Box::new(SystemDescription::new(l as TlvLength, value)),
-                8 => Box::new(ManagementAddressTLV::new(l as TlvLength, value)),
-                _ => Box::new(UnknownTLV::new(t, l as TlvLength, value))
+                4 => Box::new(tlv::port_description::new(l as TlvLength, value)),
+                5 => Box::new(tlv::system_name::new(l as TlvLength, value)),
+                6 => Box::new(tlv::system_description::new(l as TlvLength, value)),
+                7 => Box::new(tlv::system_capabilities::new(l as TlvLength, value)),
+                8 => Box::new(tlv::management_address::new(l as TlvLength, value)),
+                _ => Box::new(tlv::unknown::new(t, l as TlvLength, value))
             };
 
             tlvs.push(tlv);

@@ -1,7 +1,6 @@
 use std::fmt;
 use std::fmt::Formatter;
 use byteorder::{BigEndian, ByteOrder};
-use crate::layer2::ethernet::EtherType::LLDP;
 use crate::layer2::lldp::LLDPU;
 use crate::tlv::Packet;
 
