@@ -3,7 +3,7 @@ use std::fmt::Formatter;
 use byteorder::{BigEndian, ByteOrder};
 use crate::layer2::ethernet::EtherType::LLDP;
 use crate::layer2::lldp::LLDPU;
-use crate::misc::Packet;
+use crate::tlv::Packet;
 
 #[derive(Debug)]
 pub enum EtherType {
@@ -98,7 +98,7 @@ pub struct MacAddress<'a>(pub &'a [u8]);
 
 impl<'a> fmt::Display for MacAddress<'a> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{}-{}-{}-{}-{}-{}",
+        write!(f, "{}:{}:{}:{}:{}:{}",
                format!("{:x}", self.0[0]),
                format!("{:x}", self.0[1]),
                format!("{:x}", self.0[2]),
