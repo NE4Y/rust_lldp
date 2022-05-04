@@ -41,25 +41,25 @@ pub struct Ethernet<'a> {
     next: Option<Box<dyn Packet + 'a>>
 }
 
-impl<'a> Ethernet<'a> {
-    pub fn new(bytes: &[u8]) -> Ethernet {
-        let ether_type = EtherType::get_type(BigEndian::read_u16(&bytes[12..14]));
+pub fn new(bytes: &[u8]) -> Ethernet {
+    let ether_type = EtherType::get_type(BigEndian::read_u16(&bytes[12..14]));
 
-        let next_packet: Option<Box<dyn Packet>> = match ether_type {
-            EtherType::LLDP => Some(Box::new(LLDPU::new(&bytes[14..]))),
-            _ => None
-        };
+    let next_packet: Option<Box<dyn Packet>> = match ether_type {
+        EtherType::LLDP => Some(Box::new(LLDPU::new(&bytes[14..]))),
+        _ => None
+    };
 
-        Ethernet {
-            mac_dst: MacAddress(&bytes[..6]),
-            mac_src: MacAddress(&bytes[6..13]),
-            vlan: None,
-            ether_type,
-            payload: &bytes[14..],
-            next: next_packet
-        }
+    Ethernet {
+        mac_dst: MacAddress(&bytes[..6]),
+        mac_src: MacAddress(&bytes[6..13]),
+        vlan: None,
+        ether_type,
+        payload: &bytes[14..],
+        next: next_packet
     }
+}
 
+impl<'a> Ethernet<'a> {
     pub fn get_ether_type(&self) -> &EtherType {
         &self.ether_type
     }
