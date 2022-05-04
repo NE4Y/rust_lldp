@@ -11,9 +11,6 @@ pub mod system_capabilities;
 use std::fmt;
 use std::fmt::{Debug, Display, Formatter};
 
-pub trait Packet : Display {
-    fn get_size(&self) -> u32;
-}
 
 pub type TlvLength = u16;
 pub type TlvValue = [u8];

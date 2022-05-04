@@ -6,6 +6,4 @@ description = "A simple lldp parser."
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-pcap = { version = "0.9", features = ["capture-stream"] }
-rshark = "0.0.1"
 byteorder = "1.4.3"

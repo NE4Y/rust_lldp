@@ -2,7 +2,7 @@ use std::fmt;
 use std::fmt::Formatter;
 use byteorder::{BigEndian, ByteOrder};
 use crate::layer2::lldp::LLDPU;
-use crate::tlv::Packet;
+use crate::layer2::Packet;
 
 #[derive(Debug)]
 pub enum EtherType {
@@ -86,8 +86,8 @@ impl<'a> fmt::Display for Ethernet<'a> {
 }
 
 impl<'a> Packet for Ethernet<'a> {
-    fn get_size(&self) -> u32 {
-        5
+    fn get_size(&self) -> usize {
+        self.payload.len() + 14
     }
 }
 

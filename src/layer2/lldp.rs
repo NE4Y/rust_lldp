@@ -2,7 +2,7 @@ use std::fmt;
 use std::fmt::Formatter;
 use byteorder::{BigEndian, ByteOrder};
 use crate::tlv;
-use crate::tlv::Packet;
+use crate::layer2::Packet;
 
 use crate::tlv::*;
 
@@ -67,11 +67,11 @@ impl fmt::Display for LLDPU<'_> {
 }
 
 impl<'a> Packet for LLDPU<'a> {
-    fn get_size(&self) -> u32 {
-        let mut size: u32 = 0;
+    fn get_size(&self) -> usize {
+        let mut size: usize = 0;
 
         for tlv in &self.tlvs {
-            size += tlv.get_length() as u32 + 2;
+            size += tlv.get_length() as usize + 2;
         }
 
         size
