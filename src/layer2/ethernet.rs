@@ -98,14 +98,26 @@ pub struct MacAddress<'a>(pub &'a [u8]);
 impl<'a> fmt::Display for MacAddress<'a> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(f, "{}:{}:{}:{}:{}:{}",
-               format!("{:x}", self.0[0]),
-               format!("{:x}", self.0[1]),
-               format!("{:x}", self.0[2]),
-               format!("{:x}", self.0[3]),
-               format!("{:x}", self.0[4]),
-               format!("{:x}", self.0[5]))
+               format!("{:02x}", self.0[0]),
+               format!("{:02x}", self.0[1]),
+               format!("{:02x}", self.0[2]),
+               format!("{:02x}", self.0[3]),
+               format!("{:02x}", self.0[4]),
+               format!("{:02x}", self.0[5]))
     }
 }
 
 #[derive(Debug)]
 struct Vlan {}
+
+#[cfg(test)]
+mod tests {
+    use crate::layer2::ethernet::MacAddress;
+
+    #[test]
+    fn mac_address_format() {
+        let bytes: [u8; 6] = [0x01, 0x80, 0xc2, 0x00, 0x00, 0x0e];
+
+        assert_eq!("01:80:c2:00:00:0e", MacAddress(&bytes).to_string());
+    }
+}
